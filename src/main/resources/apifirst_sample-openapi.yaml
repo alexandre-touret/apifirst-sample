@@ -4,9 +4,9 @@ info:
   description: "apifirst_sample API"
   version: "1.0.0"
 servers:
-  - url: "https://apifirst_sample"
+  - url: "https://apifirst_sample/api"
 paths:
-  /:
+  /guitars:
     get:
       summary: "Retrieve all guitars"
       description: "Fetches a list of all guitars available in the system."
@@ -35,7 +35,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Void"
-  /{id}:
+  /guitars/{id}:
     put:
       summary: "Update an existing guitar"
       description: "Updates the details of an existing guitar."
