@@ -1,0 +1,102 @@
+openapi: "3.1.0"
+info:
+  title: "apifirst_sample API"
+  description: "apifirst_sample API"
+  version: "1.0.0"
+servers:
+  - url: "https://apifirst_sample"
+paths:
+  /:
+    get:
+      summary: "Retrieve all guitars"
+      description: "Fetches a list of all guitars available in the system."
+      operationId: ""
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Guitars"
+    post:
+      summary: "Create a new guitar"
+      description: "Creates a new guitar with the provided details."
+      operationId: ""
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Guitar"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Void"
+  /{id}:
+    put:
+      summary: "Update an existing guitar"
+      description: "Updates the details of an existing guitar."
+      operationId: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "ID of the guitar to update"
+          schema:
+            type: "string"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Guitar"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Guitar"
+    delete:
+      summary: "Delete a guitar"
+      description: "Deletes the guitar identified by the given ID."
+      operationId: ""
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          description: "ID of the guitar to delete"
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Void"
+components:
+  schemas:
+    Guitar:
+      type: "object"
+      properties:
+        brand:
+          type: "string"
+        name:
+          type: "string"
+        creationDate:
+          type: "string"
+          format: "date-time"
+    Guitars:
+      type: "object"
+      properties:
+        guitars:
+          type: "array"
+          items:
+            $ref: "#/components/schemas/Guitar"
+    Void:
+      type: "object"
+      properties: { }
