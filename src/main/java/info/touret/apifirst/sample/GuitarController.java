@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
+@RequestMapping("/api/guitars")
 public class GuitarController {
 
     private final GuitarService guitarService;
@@ -18,12 +19,14 @@ public class GuitarController {
         this.guitarService = guitarService;
     }
 
-    @Operation(summary = "Retrieve all guitars", description = "Fetches a list of all guitars available in the system.")
+    @Operation(summary = "Retrieve all guitars",
+            description = "Fetches a list of all guitars available in the system.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successful retrieval of guitars",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Guitars.class,
-                                    example = "{ \"guitars\": [ { \"id\": 1, \"brand\": \"Fender\", \"model\": \"Stratocaster\" }, { \"id\": 2, \"brand\": \"Gibson\", \"model\": \"Les Paul\" } ] } }"))),
+                                    example = "{ \"guitars\": [ { \"id\": 1, \"brand\": \"Fender\", \"model\": \"Stratocaster\" }, " +
+                                            "{ \"id\": 2, \"brand\": \"Gibson\", \"model\": \"Les Paul\" } ] } }"))),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping
