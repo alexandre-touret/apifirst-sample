@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
-@RequestMapping("/api/guitars")
+@RequestMapping("/guitars")
 public class GuitarController {
 
     private final GuitarService guitarService;
@@ -43,7 +43,7 @@ public class GuitarController {
             @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Void> createGuitar(@Parameter(description = "Guitar object that needs to be added")
+    public ResponseEntity<Object> createGuitar(@Parameter(description = "Guitar object that needs to be added")
                                              @RequestBody Guitar guitar) {
         return ResponseEntity.status(201).build();
     }
@@ -70,7 +70,7 @@ public class GuitarController {
             @ApiResponse(responseCode = "404", description = "Guitar not found")
     })
     @DeleteMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<Void> deleteGuitar(@Parameter(description = "ID of the guitar to delete")
+    public ResponseEntity<Object> deleteGuitar(@Parameter(description = "ID of the guitar to delete")
                                              @PathVariable String id) {
         return ResponseEntity.noContent().build();
     }

@@ -2,11 +2,12 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.5'
     id 'io.spring.dependency-management' version '1.1.6'
+    //    id 'org.openapi.generator' version '7.9.0'
 }
 
 group = 'info.touret.apifirst'
 version = '0.0.1-SNAPSHOT'
-
+//apply plugin: 'org.openapi.generator'
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
@@ -29,3 +30,33 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+/*
+
+openApiValidate {
+    inputSpec = "$projectDir${openapi_path}".toString()
+    recommend = true
+}
+openApiGenerate {
+    generatorName = "spring"
+    library = "spring-boot"
+    inputSpec = "$projectDir${openapi_path}".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "info.touret.apifirst.sample.generated"
+    invokerPackage = "info.touret.apifirst.sample.generated.invoker"
+    modelPackage = "info.touret.apifirst.sample.generated"
+    configOptions = [
+            dateLibrary          : "java8",
+            java8                : "true",
+            openApiNullable      : "false",
+            documentationProvider: "springdoc",
+            useBeanValidation    : "true",
+            interfaceOnly        : "true",
+            useSpringBoot3       : "true",
+            generateConstructorWithAllArgs : "true"
+    ]
+}
+sourceSets.main.java.srcDirs += "$buildDir/generated/src/main/java".toString()
+compileJava.dependsOn 'openApiGenerate'
+
+ */
