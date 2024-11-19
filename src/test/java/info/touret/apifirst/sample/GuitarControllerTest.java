@@ -2,15 +2,18 @@ package info.touret.apifirst.sample;
 
 import info.touret.apifirst.sample.generated.Guitar;
 import info.touret.apifirst.sample.generated.Guitars;
+import io.github.microcks.testcontainers.MicrocksContainersEnsemble;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatusCode;
+import org.testcontainers.Testcontainers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -20,6 +23,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
         "server.port=8042",
         "management.server.port=9042"
 })
+@Import(TestGuitarConfiguration.class)
 class GuitarControllerTest {
 
     @LocalServerPort
@@ -34,8 +38,12 @@ class GuitarControllerTest {
 
     @BeforeEach
     void setUp() {
-
+        Testcontainers.exposeHostPorts(port);
     }
+
+    @Autowired
+    protected MicrocksContainersEnsemble microcksEnsemble;
+
 
     @Test
     void should_return_200_guitars() {

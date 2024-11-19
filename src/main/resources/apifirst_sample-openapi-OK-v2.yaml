@@ -1,8 +1,12 @@
-openapi: "3.0.0"
+openapi: "3.1.0"
 info:
   title: "apifirst_sample API"
   description: "apifirst_sample API"
-  version: "1.1.2"
+  version: "1.0.0"
+tags:
+  - name: Guitar Management
+    description: Operations related to guitar management
+
 servers:
   - url: "https://apifirst_sample"
 paths:
@@ -11,35 +15,61 @@ paths:
       summary: "Retrieve all guitars"
       description: "Fetches a list of all guitars available in the system."
       operationId: "findAllGuitars"
+      tags:
+        - "Guitar Management"
       responses:
         "200":
-          description: "OK"
+          description: "A list of guitars"
           content:
-            '*/*':
+            application/json:
               schema:
                 $ref: "#/components/schemas/Guitars"
+              examples:
+                example1:
+                  summary: "A sample list of guitars"
+                  value:
+                    guitars:
+                      - brand: "Fender"
+                        name: "Stratocaster"
+                        creationDate: "2023-10-01T12:00:00Z"
+                      - brand: "Gibson"
+                        name: "Les Paul"
+                        creationDate: "2023-09-15T08:30:00Z"
     post:
       summary: "Create a new guitar"
       description: "Creates a new guitar with the provided details."
       operationId: "createGuitar"
+      tags:
+        - "Guitar Management"
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/Guitar"
+            example:
+              brand: "Ibanez"
+              name: "RG550"
+              creationDate: "2023-10-10T14:00:00Z"
         required: true
+        description: "Guitar to be created"
       responses:
         "200":
-          description: "OK"
+          description: "The newly created guitar"
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Void"
+                $ref: "#/components/schemas/Guitar"
+              example:
+                brand: "Ibanez"
+                name: "RG550"
+                creationDate: "2023-10-10T14:00:00Z"
   /guitars/{id}:
     put:
       summary: "Update an existing guitar"
       description: "Updates the details of an existing guitar."
       operationId: "updateGuitar"
+      tags:
+        - "Guitar Management"
       parameters:
         - name: "id"
           in: "path"
@@ -47,23 +77,36 @@ paths:
           description: "ID of the guitar to update"
           schema:
             type: "string"
+            example: "1"
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/Guitar"
+            example:
+              brand: "Gibson"
+              name: "Les Paul Custom"
+              creationDate: "2023-09-20T15:45:00Z"
         required: true
+        description: "Guitar to be updated"
+
       responses:
         "200":
-          description: "OK"
+          description: "The updated guitar"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Guitar"
+              example:
+                brand: "Gibson"
+                name: "Les Paul Custom"
+                creationDate: "2023-09-20T15:45:00Z"
     delete:
       summary: "Delete a guitar"
       description: "Deletes the guitar identified by the given ID."
       operationId: "deleteGuitar"
+      tags:
+        - "Guitar Management"
       parameters:
         - name: "id"
           in: "path"
@@ -71,13 +114,15 @@ paths:
           description: "ID of the guitar to delete"
           schema:
             type: "string"
+            example: "1"
       responses:
         "200":
-          description: "OK"
+          description: "Success response for deletion"
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Void"
+              example: {}
 components:
   schemas:
     Guitar:
@@ -85,21 +130,25 @@ components:
       properties:
         brand:
           type: "string"
+          example: "Fender"
         name:
           type: "string"
+          example: "Stratocaster"
         creationDate:
           type: "string"
           format: "date-time"
+          example: "2023-10-01T12:00:00Z"
         guitarType:
           type: "string"
           enum:
             - "electric"
             - "folk"
             - "gipsy"
-
-
+          example: "gipsy"
+      description: "Guitar"
     Guitars:
       type: "object"
+      description: "Guitar List"
       properties:
         guitars:
           type: "array"
@@ -107,4 +156,5 @@ components:
             $ref: "#/components/schemas/Guitar"
     Void:
       type: "object"
-      properties: { }
+      properties: {}
+      description: "Void (aka nothing)"

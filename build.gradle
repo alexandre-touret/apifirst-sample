@@ -1,3 +1,6 @@
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+import org.openapitools.generator.gradle.plugin.tasks.ValidateTask
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.5'
@@ -26,17 +29,22 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    testImplementation 'io.github.microcks:microcks-testcontainers:0.2.9'
+    testImplementation 'org.springframework.boot:spring-boot-testcontainers'
+
 }
 
 tasks.named('test') {
     useJUnitPlatform()
 }
 
-openApiValidate {
+tasks.register("serverApiValidate", ValidateTask) {
     inputSpec = "$projectDir${openapi_path}".toString()
     recommend = true
 }
-openApiGenerate {
+
+tasks.register("serverApiGenerate", GenerateTask) {
     generatorName = "spring"
     library = "spring-boot"
     inputSpec = "$projectDir${openapi_path}".toString()
@@ -45,15 +53,35 @@ openApiGenerate {
     invokerPackage = "info.touret.apifirst.sample.generated.invoker"
     modelPackage = "info.touret.apifirst.sample.generated"
     configOptions = [
-            dateLibrary          : "java8",
-            java8                : "true",
-            openApiNullable      : "false",
-            documentationProvider: "springdoc",
-            useBeanValidation    : "true",
-            interfaceOnly        : "true",
-            useSpringBoot3       : "true",
-            generateConstructorWithAllArgs : "true"
+            dateLibrary                   : "java8",
+            java8                         : "true",
+            openApiNullable               : "false",
+            documentationProvider         : "springdoc",
+            useBeanValidation             : "true",
+            interfaceOnly                 : "true",
+            useSpringBoot3                : "true",
+            generateConstructorWithAllArgs: "true"
     ]
 }
 sourceSets.main.java.srcDirs += "$buildDir/generated/src/main/java".toString()
-compileJava.dependsOn 'openApiGenerate'
+compileJava.dependsOn 'serverApiGenerate'
+
+tasks.register("mockApiGenerate", GenerateTask) {
+    generatorName = "java-wiremock"
+    inputSpec = "$projectDir${openapi_path}".toString()
+    outputDir = "$buildDir/generated".toString()
+    apiPackage = "info.touret.apifirst.sample.mock"
+    invokerPackage = "info.touret.apifirst.sample.mock.invoker"
+    modelPackage = "info.touret.apifirst.sample.mock"
+
+    configOptions = [
+            dateLibrary                   : "java8",
+            java8                         : "true",
+            openApiNullable               : "false",
+            documentationProvider         : "springdoc",
+            useBeanValidation             : "true",
+            interfaceOnly                 : "true",
+            useSpringBoot3                : "true",
+            generateConstructorWithAllArgs: "true"
+    ]
+}

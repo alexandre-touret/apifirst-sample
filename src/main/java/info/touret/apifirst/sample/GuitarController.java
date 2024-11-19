@@ -26,7 +26,7 @@ public class GuitarController implements GuitarsApi {
     }
 
     @Override
-    public ResponseEntity<Object> createGuitar(@Parameter(description = "Guitar object that needs to be added")
+    public ResponseEntity<Guitar> createGuitar(@Parameter(description = "Guitar object that needs to be added")
                                              @RequestBody Guitar guitar) {
         return ResponseEntity.status(201).build();
     }
